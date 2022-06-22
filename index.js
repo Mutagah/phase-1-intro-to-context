@@ -51,7 +51,3 @@ function allWagesFor(employeeRecords){
     let payment = dates.reduce((data)=>{return data + wagesEarnedOnDate(employeeRecords)}, 0)
 return payment
 }
-
-// function calculatePayroll(myArray){
-//     return myArray.reduce(function(data,record){return data + allWagesFor(record)},0)
-// }
