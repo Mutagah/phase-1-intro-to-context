@@ -44,10 +44,24 @@ function hoursWorkedOnDate(employeeWorkedHours){
      return(employeeWorkedHours.timeOutEvents[0].hour - employeeWorkedHours.timeInEvents[0].hour)/100
 }
 function wagesEarnedOnDate(employeeWorkedHours){
-    return hoursWorkedOnDate(employeeWorkedHours) * 27
-
+    return hoursWorkedOnDate(employeeWorkedHours) * employeeWorkedHours["payPerHour"]
 }
-//  function allWagesFor(employeeWorkedHours){
-//         wagesEarnedOnDate(employeeWorkedHours)
+function allWagesFor(employeeRecords){
+    let dates = employeeRecords.timeInEvents.map((employee)=>{ return employee.date})
+    let payment = dates.reduce((data)=>{return data + wagesEarnedOnDate(employeeRecords)}, 0)
+return payment
+}
+function calculatePayroll(arrayOfEmployeeRecords){
+    return arrayOfEmployeeRecords.reduce((memo, rec)=>{
+        return memo + allWagesFor(rec)
+    }, 0)
+}
 
+
+
+
+
+
+// function calculatePayroll(myArray){
+//     return myArray.reduce(function(data,record){return data + allWagesFor(record)},0)
 // }
