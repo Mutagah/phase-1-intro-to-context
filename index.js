@@ -39,29 +39,22 @@ function createTimeOutEvent(eRecordWithoutTimeOut,dateStamp = "YYYY-MM-DD HHMM")
 
 return eRecordWithoutTimeOut
 }
-
-function hoursWorkedOnDate(employeeWorkedHours){
-     return(employeeWorkedHours.timeOutEvents[0].hour - employeeWorkedHours.timeInEvents[0].hour)/100
-}
-function wagesEarnedOnDate(employeeWorkedHours){
-    return hoursWorkedOnDate(employeeWorkedHours) * employeeWorkedHours["payPerHour"]
-}
-function allWagesFor(employeeRecords){
-    let dates = employeeRecords.timeInEvents.map((employee)=>{ return employee.date})
-    let payment = dates.reduce((data)=>{return data + wagesEarnedOnDate(employeeRecords)}, 0)
-return payment
-}
-function calculatePayroll(myArray){
-    return myArray.reduce((data, record)=>{
-        return data + allWagesFor(record)
-    }, 0)
+function hoursWorkedOnDate(employeeRecord, dateWorked){
+let employeeTimeInEvent = employeeRecord.timeInEvents.find( (employeeRecord) =>{return employeeRecord.date === dateWorked})
+let employeeTimeOutEvent = employeeRecord.timeOutEvents.find((employeeRecord)=>{return employeeRecord.date === dateWorked})
+return (employeeTimeOutEvent.hour - employeeTimeInEvent.hour) / 100
 }
 
+function wagesEarnedOnDate(employeeRecord, dateWorked){
+    let earnedWages = hoursWorkedOnDate(employeeRecord, dateWorked) * employeeRecord.payPerHour
+    return parseFloat(earnedWages.toString())
+}
 
-
-
-
-
-function calculatePayroll(myArray){
-    return myArray.reduce(function(data,record){return data + allWagesFor(record)},0)
+function allWagesFor(employeeRecord){
+    let DatestobePaid = employeeRecord.timeInEvents.map((employeeRecord)=>{return employeeRecord.date})
+    let pay = DatestobePaid.reduce((data, date)=>{return data + wagesEarnedOnDate(employeeRecord,date)}, 0)
+return pay
+}
+function calculatePayroll(arrayOfEmployeeRecords){return arrayOfEmployeeRecords.reduce((data, record)=>{
+        return data + allWagesFor(record)}, 0)
 }
